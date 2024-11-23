@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import axios from 'axios';
 
 const CarPredictionForm = () => {
   const [loading, setLoading] = useState(false);
+  const [predictedPrice, setPredictedPrice] = useState(null);
   const [formData, setFormData] = useState({
     brand: '',
     model: '',
@@ -33,12 +35,30 @@ const CarPredictionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Placeholder for API call
+    setPredictedPrice(null);
+
+    const payload = {
+      brand: formData.brand,
+      model: formData.model,
+      milage: parseFloat(formData.milage),
+      ext_col: formData.exteriorColor,
+      int_col: formData.interiorColor,
+      accident: formData.beenInAccident ? 1 : 0,
+      clean_title: formData.cleanTitle ? 1 : 0,
+      hp: parseFloat(formData.hp),
+      L: parseFloat(formData.engineSize),
+      cyl_count: parseInt(formData.cylCount, 10),
+      electric: formData.electric ? 1 : 0,
+      turbo: formData.hasTurbo ? 1 : 0,
+      trans_speed: parseInt(formData.transmissionSpeeds, 10),
+      manual: formData.manual ? 1 : 0,
+      automatic: formData.automatic ? 1 : 0,
+      model_year: parseInt(formData.yearOfCar, 10)
+    };
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated API delay
-      // Add your API call here
-      console.log('Form data submitted:', formData);
+      const response = await axios.post('http://localhost:8000/predict', payload);
+      setPredictedPrice(response.data.predicted_price);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -250,6 +270,12 @@ const CarPredictionForm = () => {
           )}
         </button>
       </form>
+
+      {predictedPrice && (
+        <div className="mt-6 p-4 bg-green-100 text-green-800 rounded-lg">
+          <h2 className="text-xl font-bold">Predicted Price: {predictedPrice}</h2>
+        </div>
+      )}
     </div>
   );
 };
