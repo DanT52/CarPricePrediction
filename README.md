@@ -19,6 +19,9 @@ the python requirments are in `requirements.txt`
 
 ### Running the interactive front end where you can input custom data
 
+Make sure that you ahve already ran the notebook or the carPriceRandomForest.py,
+as we need the pkl files they output to be in the same directory.
+
 first go to the car-prediction-app directory
 
 ```
