@@ -32,6 +32,7 @@ const CarPredictionForm = () => {
     }));
   };
 
+  // do a post request with the form data with axios
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
